@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Initialize image watcher
-const watchDir = join(__dirname, "../../img");
+const watchDir = join(__dirname, "output");
 const watcher = new ImageWatcher(watchDir);
 watcher.start();
 
