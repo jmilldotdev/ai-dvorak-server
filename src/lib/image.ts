@@ -55,10 +55,7 @@ export async function composeImage(
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  const outputImagePath = path.join(
-    outputDir,
-    `${crypto.randomBytes(20).toString("hex")}.png`
-  );
+  const outputImagePath = path.join(outputDir, `${Date.now()}.png`);
 
   try {
     const textToSVG = TextToSVG.loadSync();

@@ -9,11 +9,14 @@
     "watch": "tsc -w"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.33.1",
     "axios": "^1.7.9",
     "chokidar": "^3.5.3",
     "comfy-ui-client": "^0.1.2",
+    "dotenv": "^16.4.7",
     "express": "^4.18.2",
     "net": "^1.0.2",
+    "openai": "^4.77.3",
     "sharp": "^0.33.5",
     "text-to-svg": "^3.1.5"
   },

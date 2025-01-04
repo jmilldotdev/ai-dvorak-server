@@ -81,7 +81,6 @@ export const generateImage = async (prompt: string): Promise<string> => {
   const clientId = "baadbabe-b00b-4206-9420-deadd00d1337";
   const client = new ComfyUIClient(serverAddress, clientId);
   const inputPrompt = comfyWorkflow(prompt);
-  console.log("inputPrompt", inputPrompt);
 
   // Connect to server
   await client.connect();

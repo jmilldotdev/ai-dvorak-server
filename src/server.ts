@@ -3,7 +3,7 @@ import { ImageWatcher } from "./imageWatcher";
 import { join } from "path";
 import { localHandlers } from "./lib/local";
 import { composeImage } from "./lib/image";
-import { Card, CardType } from "./lib/types";
+import { createCard } from "./lib/llm";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,34 +23,49 @@ app.get("/health", (req, res) => {
   res.json({ status: "healthy" });
 });
 
+type GenerateRequest = {
+  name: string;
+  type?: string;
+  rulesHint?: string;
+  imagePrompt?: string;
+};
+
 app.post("/generate", async (req, res) => {
   try {
-    const { prompt } = req.body;
+    const {
+      name,
+      type,
+      rulesHint,
+      imagePrompt = "",
+    }: GenerateRequest = req.body;
 
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
+    if (!name) {
+      return res.status(400).json({ error: "Name is required" });
     }
 
-    const card: Card = {
-      name: "Test",
-      type: CardType.Action,
-      rules: "Test",
-    };
-
-    // First generate the art image
-    const artImagePath = await localHandlers.generateImage(prompt);
+    // Run card text and image generation in parallel
+    const [cardData, artImagePath] = await Promise.all([
+      createCard({ name, type, rulesHint }),
+      localHandlers.generateImage(
+        imagePrompt || `Fantasy card art for ${name}`
+      ),
+    ]);
 
     // Then compose the full card with the generated art
-    const cardImagePath = await composeImage(card, artImagePath);
+    const cardImagePath = await composeImage(cardData, artImagePath);
 
     res.json({
       success: true,
+      card: cardData,
       artImagePath,
       cardImagePath,
     });
   } catch (error) {
-    console.error("Error generating image:", error);
-    res.status(500).json({ error: "Failed to generate image" });
+    console.error("Error generating card:", error);
+    res.status(500).json({
+      error: "Failed to generate card",
+      details: error instanceof Error ? error.message : String(error),
+    });
   }
 });
 
