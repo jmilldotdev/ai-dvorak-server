@@ -90,7 +90,7 @@ export const generateImage = async (prompt: string): Promise<string> => {
   const images = await client.getImages(inputPrompt);
   const imageFilename = images["9"][0].image.filename;
 
-  const outputDir = path.join(process.cwd(), "output");
+  const outputDir = path.join(process.cwd(), "raw_output");
   // Create output directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
@@ -106,14 +106,6 @@ export const generateImage = async (prompt: string): Promise<string> => {
   return filepath;
 };
 
-const saveImage = async (buffer: Buffer, filename: string): Promise<string> => {
-  const outputPath = `/Users/jmill/projects/ai-dvorak-server/img/${filename}`;
-  // Save the image to the specified path using fs
-  fs.writeFileSync(outputPath, buffer);
-  return outputPath;
-};
-
 export const localHandlers = {
   generateImage,
-  saveImage,
 };
