@@ -1,9 +1,11 @@
 # Setup
 
 **Start ComfyUI**
+
 Make sure ComfyUI is running on an accessible server.
 
 **Create env**
+
 Copy `.env.example` and fill in the values.
 `COMFYUI_EMBEDDINGS_NAME` and `COMFYUI_LORA_NAME` should be the entire filenames of the LoRA and embeddings you are using, and they should be loaded in your ComfyUI server.
 
