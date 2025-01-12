@@ -37,7 +37,7 @@ const comfyWorkflow = (prompt: string): Prompt => {
     },
     "6": {
       inputs: {
-        text: `${prompt}, in the style of embedding:clipguideddiffusion_embeddings`,
+        text: `${prompt}, in the style of ${process.env.COMFYUI_EMBEDDINGS_NAME}`,
         clip: ["10", 1],
       },
       class_type: "CLIPTextEncode",
@@ -65,7 +65,7 @@ const comfyWorkflow = (prompt: string): Prompt => {
     },
     "10": {
       inputs: {
-        lora_name: "clipguideddiffusion_lora.safetensors",
+        lora_name: process.env.COMFYUI_LORA_NAME,
         strength_model: 0.7000000000000001,
         strength_clip: 1,
         model: ["4", 0],
@@ -77,7 +77,7 @@ const comfyWorkflow = (prompt: string): Prompt => {
 };
 
 export const generateImage = async (prompt: string): Promise<string> => {
-  const serverAddress = "127.0.0.1:8188";
+  const serverAddress = process.env.COMFYUI_SERVER_URL as string;
   const clientId = "baadbabe-b00b-4206-9420-deadd00d1337";
   const client = new ComfyUIClient(serverAddress, clientId);
   const inputPrompt = comfyWorkflow(prompt);
